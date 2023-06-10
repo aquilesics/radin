@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>  
+    <script>
+        function test(){
+            
+            return 'teste'
+        }
+    </script>  
+    <div x-data="{ search: '',results:[{}] }">
+        <input type="text" x-model="search" placeholder="search"  >
+        <!-- <div x-effect="console.log('Count is '+ search)"></div> -->
+        <!-- <button x-on:click="console.log(search)">search</button> -->
+        <!-- <span x-text="search"></span> -->
+        <button x-on:click="results = (await axios.get('../search/'+search)).data">search</button>
+        <br>
+        <template x-for="result in results" >
+            <div x-data="{ audio_url : ''}" >
+                <span x-text="result.title;audio_url = '' "></span>
+                <br>
+                <img :src=result.thumbnails[0] x-model="thumb" width=360 height=202  x-on:dblclick="audio_url = (await axios.get('../audio/'+result.id)).data">
+                <br>
+                <iframe :src="audio_url" frameborder="0" width=360 height=30></iframe>
+                <br>
+            </div>            
+        </template>
+    </div>
+</body>
+</html>
