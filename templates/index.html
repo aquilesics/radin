@@ -5,32 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <title>Radin</title>
 </head>
+
 <body>  
-    <script>
+    <script>        
         function test(){
             
             return 'teste'
         }
+        
     </script>  
-    <div x-data="{ search: '',results:[{}] }">
-        <input type="text" x-model="search" placeholder="search"  >
-        <!-- <div x-effect="console.log('Count is '+ search)"></div> -->
-        <!-- <button x-on:click="console.log(search)">search</button> -->
-        <!-- <span x-text="search"></span> -->
-        <button x-on:click="results = (await axios.get('../search/'+search)).data">search</button>
+    <style>
+        .responsive-iframe {
+          /* position: absolute; */
+          /* top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0; */
+          width: 100%;
+          height: 100%;
+        }
+    </style>
+    <div x-data="{ search: '',results:[{}] }" class="container is-fluid" >
+        <div class="level">
+            <p class="level-item has-text-centered"></p>
+        </div>
+        <h1 class="title" style="text-align:center">Radin</h1>
+        <p class="subtitle" style="text-align: center;">Ouça musicas do youtube sem anuncios</p>
+        <div class="columns is-desktop  is-multline" >
+            <div class="column">
+                <!-- <div class="box"> -->
+                    <input type="text" x-model="search" placeholder="search"  class="input is-primary is-rounded" @keyup.enter="results = (await axios.get('../search/'+search)).data" >
+                <!-- </div> -->
+            </div>
+            <div class="column is-narrow">
+                <!-- <div class="box" style="width:300px;"> -->
+                    <button x-on:click="results = (await axios.get('../search/'+search)).data" class="button is-primary is-rounded">search</button>
+                <!-- </div> -->
+            </div>
+        </div>
         <br>
-        <template x-for="result in results" >
-            <div x-data="{ audio_url : ''}" >
-                <span x-text="result.title;audio_url = '' "></span>
-                <br>
-                <img :src=result.thumbnails[0] x-model="thumb" width=360 height=202  x-on:dblclick="audio_url = (await axios.get('../audio/'+result.id)).data">
-                <br>
-                <iframe :src="audio_url" frameborder="0" width=360 height=30></iframe>
-                <br>
-            </div>            
-        </template>
+        <div class="columns is-multiline is-desktop is-two-thirds">        
+            <template x-for="result in results" >
+                <template x-if="results.length > 1">
+                <div x-data="{ audio_url : ''}" class="column is-4" >
+                    <div class="box" style="background-color: #F1F3F4;" >
+                        <span x-text="result.title.substring(0,30)+'...' ;audio_url = '' " class="subtitle"></span>
+                        <br>
+                            <!-- <audio :src=axios.get("https://rr2---sn-ov8xaauxaxjvhcg-jbie.googlevideo.com/videoplayback?expire=1686635185&ei=Ua6HZIGLBsii4dUPx5uPmAY&ip=201.216.119.69&id=o-ANn8Q6vA6CZ9lrR3O2G0jsv1Zixs6LsRZbv5CdZK-7o8&itag=249&source=youtube&requiressl=yes&mh=RC&mm=31%2C29&mn=sn-ov8xaauxaxjvhcg-jbie%2Csn-bg0eznek&ms=au%2Crdu&mv=m&mvi=2&pcm2cms=yes&pl=24&initcwndbps=532500&spc=qEK7B1Vw6PwuCou0R-HOcOMwABTtL5xQvgArhvG_8w&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=sfF4lip14jeR45iB-F9sDoAN&gir=yes&clen=1213015&dur=193.321&lmt=1652705806146239&mt=1686613304&fvip=4&keepalive=yes&fexp=24007246%2C51000024&beids=24350018&c=WEB&txp=5532434&n=u1gZV-_Dy7uaAMWp24&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIhAJXedw5WMUIMsw6nTWXmWjWX8M2HW6-S64wzm__CTmXlAiARuvh3zNrktdFlXRCfgD47XO5H0Y72MBYd2BTIPBjh6w%3D%3D&sig=AOq0QJ8wRQIgAtaYU5OVJl4t2izsieLvN_8iVGb6BR8PS-_tSs0suuoCIQC6FEgSlSeRpHXUsmBbQINADd_nMNwdICX06TZtl-x76w==")></audio> -->
+                            <figure class="image is-256x256">
+                            <!-- <iframe :src="audio_url" frameborder="0"></iframe> -->
+                            <!-- <img :src=result.thumbnails[0] x-model="thumb" style="z-index: 1;" x-on:dblclick="audio_url = (await axios.get('../audio/'+result.id)).data">     -->
+                            <img :src=result.thumbnails[0] x-model="thumb" style="z-index: 1;" x-on:dblclick="audio_url = true">    
+                            <template x-if="audio_url === true">
+                                <audio controls  name="media" style="width: 100%;">
+                                    <source :src=`../audio/stream/${result.id}` type="audio/webm">
+                                </audio>
+                            </template>
+                        </figure>                                     
+                    </div>                    
+                 </div>   
+                </template>        
+            </template>
+        </div>
     </div>
+    
 </body>
 </html>

@@ -1,10 +1,11 @@
 from typing import Union
 import youtube_dl as ydl
 from youtube_search import YoutubeSearch as yts
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse,StreamingResponse
+import requests as rq
 
 app = FastAPI()
 app.mount('/static',StaticFiles(directory = 'static'), name='static')
@@ -51,7 +52,21 @@ async def get_audio( video_id ):
     with ydl.YoutubeDL() as yt:
         _ = yt.extract_info(url=url, download=False)
 
-    return filter_formats( _['formats'] )[0]['url']
+    audio_src = filter_formats( _['formats'] )[0]['url']
+
+    return audio_src
+
+@app.get('/audio/stream/{video_id}')
+async def get_audio( video_id ):
+    url = f'https://www.youtube.com/watch?v={video_id}'
+    with ydl.YoutubeDL() as yt:
+        _ = yt.extract_info(url=url, download=False)
+
+    audio_src = filter_formats( _['formats'] )[0]['url']
+    audio_iter =  rq.get(audio_src,stream=True).iter_content()
+
+    return StreamingResponse(audio_iter,media_type='audio/webm')
+
 
 @app.get(" /test")
 async def test():
