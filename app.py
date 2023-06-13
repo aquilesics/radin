@@ -20,7 +20,7 @@ def filter_formats(list_of_formats) -> list[dict]:
     _formats = []
     keep = ('filesize', 'format_id', 'quality', 'url', 'format','ext' )
     for format in list_of_formats:
-        if format.get('format_id') in ('249','250','251'): 
+        if format.get('acodec') != 'none' and format.get('vcodec') != 'none' : 
             _formats.append(       
                 { k:v for k,v in format.items() if k in keep }
             )
@@ -52,7 +52,7 @@ async def get_audio( video_id ):
     with ydl.YoutubeDL() as yt:
         _ = yt.extract_info(url=url, download=False)
 
-    audio_src = filter_formats( _['formats'] )[0]['url']
+    audio_src = filter_formats( _['formats'] )[-1]['url']
 
     return audio_src
 
