@@ -97,7 +97,7 @@
         <div class="columns is-multiline is-desktop is-two-thirds">        
             <template x-for="result in results" >
                 <template x-if="results.length > 1">
-                <div x-data="{ audio_url : ''}" class="column is-4" >
+                <div x-data="{ audio_url : '', clicked:false }" class="column is-4" >
                     <div class="box"  >
                         <span x-text="result.title.substring(0,30)+'...' ;audio_url = '';clicked = false" class="subtitle"></span>
                         <br>
@@ -106,7 +106,7 @@
                             
                                 <!-- <iframe :src="audio_url" frameborder="0"></iframe> -->
                             
-                            <div x-data="{clicked:false}"> 
+                            <div> 
                                 
                                     <img x-show="!clicked" :src=result.thumbnails[0] x-model="clicked" x-on:dblclick="clicked = !clicked;audio_url = (await axios.get('../audio/'+result.id)).data"> 
                                     <img x-show="clicked" :src=result.thumbnails[0] x-model="clicked"> 
