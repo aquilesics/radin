@@ -105,14 +105,19 @@
                             <figure class="image is-256x256">
                             
                                 <!-- <iframe :src="audio_url" frameborder="0"></iframe> -->
-                            <template x-if="clicked == false "> 
-                                <div>
-                                    <img :src=result.thumbnails[0] x-model="thumb" style="z-index: 1;" x-on:dblclick="audio_url = (await axios.get('../audio/'+result.id)).data;clicked = true"> 
-                                    <i class="fa fa-play" style="position: absolute;top: 32%; right: 43%; font-size: 80px; color: aliceblue;" x-on:click="audio_url = (await axios.get('../audio/'+result.id)).data;clicked = true"></i>
-                                <div></div>
-                            </template> 
+                            
+                            <div x-data="{clicked:false}"> 
+                                
+                                    <img x-show="!clicked" :src=result.thumbnails[0] x-model="clicked" x-on:dblclick="clicked = !clicked;audio_url = (await axios.get('../audio/'+result.id)).data"> 
+                                    <img x-show="clicked" :src=result.thumbnails[0] x-model="clicked"> 
+                                    <!-- <i class="fa fa-play" aria-disabled="true" style="position: absolute;top: 32%; right: 43%; font-size: 80px; color: aliceblue;" x-on:dblclick="clicked = true;audio_url = (await axios.get('../audio/'+result.id)).data"></i> -->
+                                    <progress x-show="clicked" class="progress is-medium is-primary" max="100">15%</progress>
+                            </div> 
+                            <!-- <template x-if="clicked" style="position: absolute;" >
+                                <progress class="progress is-small is-primary" max="100">15%</progress>
+                            </template> -->
                             <!-- <img :src=result.thumbnails[0] x-model="thumb" style="z-index: 1;" x-on:dblclick="audio_url = true">     -->
-                            <template x-if="audio_url !== ''">
+                            <template x-if="audio_url !== '';clicked = false">
                                 <!-- <audio controls  name="media" style="width: 100%;">
                                         <source :src=`../audio/stream/${result.id}` type="audio/webm">
                                     </audio> 
