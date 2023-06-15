@@ -111,10 +111,11 @@
                                     <img x-show="!clicked" :src=result.thumbnails[0] x-model="clicked" x-on:dblclick="clicked = !clicked;audio_url = (await axios.get('../audio/'+result.id)).data"> 
                                     <img x-show="clicked" :src=result.thumbnails[0] x-model="clicked"> 
                                     <!-- <i class="fa fa-play" aria-disabled="true" style="position: absolute;top: 32%; right: 43%; font-size: 80px; color: aliceblue;" x-on:dblclick="clicked = true;audio_url = (await axios.get('../audio/'+result.id)).data"></i> -->
-                                    <progress x-show="clicked" class="progress is-medium is-primary" max="100">15%</progress>
+                                    
+                                    <progress x-show="clicked" class="progress is-small is-primary" max="100" style="margin-top: 12px;">10%</progress>
                             </div> 
                             <!-- <template x-if="clicked" style="position: absolute;" >
-                                <progress class="progress is-small is-primary" max="100">15%</progress>
+                                <progress class="progress is-small is-primary" max="100">1%</progress>
                             </template> -->
                             <!-- <img :src=result.thumbnails[0] x-model="thumb" style="z-index: 1;" x-on:dblclick="audio_url = true">     -->
                             <template x-if="audio_url !== '';clicked = false">
@@ -122,7 +123,7 @@
                                         <source :src=`../audio/stream/${result.id}` type="audio/webm">
                                     </audio> 
                                 -->
-                                <iframe :src="audio_url" frameborder="0" style="position:absolute;top: 0%;bottom: 0%; right:0%; left: 0%; width: 100%; height: 100%;"></iframe>
+                                <iframe :src="audio_url" frameborder="0" style="position:absolute; background-color: white; top: 0%;bottom: 0%; right:0%; left: 0%; width: 100%; height: 100%;"></iframe>
                             </template>
                         </figure>                                     
                     </div>                    
